@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="uz" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudyPro: SAT & IELTS Assistant</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StudyPro">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200 selection:bg-indigo-500 selection:text-white">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <img src="logo.png" alt="Logo">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">StudyPro</span>
+                        <span class="text-[10px] uppercase font-bold tracking-wider block text-slate-400 -mt-1">Study Pro,SAT & IELTS PREPARATION</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/50">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm">
+                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
+                    </button>
+                    <button onclick="switchTab('vocabulary')" id="nav-vocabulary" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i>Flashcards
+                    </button>
+                    <button onclick="switchTab('analyzer')" id="nav-analyzer" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Essay Analyzer
+                    </button>
+                    <button onclick="switchTab('addword')" id="nav-addword" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
+                        <i class="fa-solid fa-plus-circle mr-1.5"></i>So'z Qo'shish
+                    </button>
+                </nav>
+
+                <!-- Actions / Install App & Dark Mode Toggle -->
+                <div class="flex items-center gap-2">
+                    <!-- INSTALL PWA BUTTON -->
+                    <button id="install-pwa-btn" onclick="promptInstallApp()" class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
+                        <i class="fa-solid fa-download"></i>
+                        <span class="hidden sm:inline">Telefonga o'rnatish</span>
+                    </button>
+
+                    <button id="theme-toggle" onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                    </button>
+
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-chart-pie w-6"></i>Dashboard
+            </button>
+            <button onclick="switchTab('vocabulary'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-layer-group w-6"></i>Flashcards & Lug'at
+            </button>
+            <button onclick="switchTab('analyzer'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-wand-magic-sparkles w-6"></i>Essay Analyzer
+            </button>
+            <button onclick="switchTab('addword'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-plus-circle w-6"></i>Yangi So'z Qo'shish
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="space-y-8">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-800 text-white p-6 sm:p-8 shadow-xl shadow-indigo-500/10">
+                <div class="relative z-10 max-w-2xl space-y-3">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                        <i class="fa-solid fa-fire text-amber-300"></i> <span id="streak-text">4 KUNLIK STREAK!</span>
+                    </span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">O'rganishda davom eting!</h1>
+                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+                        IELTS 7.5+ va SAT 1450+ maqsadlaringiz uchun har kuni kamida 10 ta yangi so'z yodlang.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('vocabulary')" class="px-5 py-2.5 bg-white text-indigo-700 hover:bg-indigo-50 font-bold text-sm rounded-xl transition-all shadow-md">
+                            Flashcards Mashq qilish <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Yodlanganlar</span>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-check-double text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span id="dash-mastered-count" class="text-3xl font-extrabold text-slate-900 dark:text-white">0</span>
+                        <span id="dash-total-words" class="text-xs text-slate-500">/ 0 ta</span>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mt-3 overflow-hidden">
+                        <div id="dash-words-progress" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">O'rganilmoqda</span>
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                            <i class="fa-solid fa-clock text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span id="dash-learning-count" class="text-3xl font-extrabold text-slate-900 dark:text-white">0</span>
+                        <span class="text-xs text-slate-500">ta so'z</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3">Takrorlash kutilmoqda</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Tahlil qilingan insholar</span>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                            <i class="fa-solid fa-file-pen text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span id="dash-essays-count" class="text-3xl font-extrabold text-slate-900 dark:text-white">0</span>
+                        <span class="text-xs text-slate-500">ta insho</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3">Writing mashqi</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Target Score</span>
+                        <div class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/50 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+                            <i class="fa-solid fa-bullseye text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-3">
+                        <span class="text-3xl font-extrabold text-slate-900 dark:text-white">IELTS 7.5+</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3">SAT Maqsad: 1450+</p>
+                </div>
+            </div>
+
+            <!-- Recommended Words & Quick Preview -->
+            <div class="bg-white dark:bg-slate-800/90 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-500"></i> Bugungi muhim lug'atlar
+                    </h3>
+                    <button onclick="switchTab('vocabulary')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+                        Barchasini ko'rish &rarr;
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="recommended-words-container">
+                    <!-- Dynamic Words -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 2: FLASHCARDS & VOCABULARY -->
+        <section id="tab-vocabulary" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                <div class="relative flex-1 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="vocab-search" oninput="renderVocabulary()" placeholder="So'zlarni qidirish..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="filterVocabCategory('all')" class="filter-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white transition-all">Barchasi</button>
+                    <button onclick="filterVocabCategory('learning')" class="filter-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-all">O'rganilmoqda</button>
+                    <button onclick="filterVocabCategory('mastered')" class="filter-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-all">Yodlanganlar</button>
+                </div>
+            </div>
+
+            <!-- Flashcard Interactive View -->
+            <div id="flashcard-view" class="max-w-xl mx-auto space-y-6">
+                <div id="flashcard-container" onclick="flipCard()" class="perspective-1000 h-80 w-full cursor-pointer group">
+                    <div id="flashcard-inner" class="transform-style-3d duration-500 relative w-full h-full rounded-3xl shadow-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 flex flex-col justify-between">
+                        
+                        <!-- CARD FRONT -->
+                        <div class="backface-hidden absolute inset-0 p-8 flex flex-col justify-between rounded-3xl bg-white dark:bg-slate-800">
+                            <div class="flex justify-between items-center">
+                                <span id="card-category-badge" class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">IELTS Academic</span>
+                                <span class="text-xs text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> Bosing</span>
+                            </div>
+                            <div class="text-center my-auto space-y-2">
+                                <h2 id="card-word" class="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Ameliorate</h2>
+                                <p id="card-pos" class="text-sm font-semibold italic text-indigo-500">verb</p>
+                                <p id="card-uzbek" class="text-base font-medium text-slate-500 dark:text-slate-400 mt-2">(Yaxshilamoq)</p>
+                            </div>
+                            <div class="text-center text-xs text-slate-400">
+                                Ta'rifini ko'rish uchun kartani og'iring &rarr;
+                            </div>
+                        </div>
+
+                        <!-- CARD BACK -->
+                        <div class="backface-hidden rotate-y-180 absolute inset-0 p-8 flex flex-col justify-between rounded-3xl bg-indigo-900 text-white shadow-xl">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold uppercase text-indigo-300">Ta'rif & Misol</span>
+                                <button onclick="speakCurrentWord(event)" class="w-8 h-8 rounded-full bg-indigo-800 hover:bg-indigo-700 flex items-center justify-center text-indigo-200 hover:text-white">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-4 my-auto">
+                                <div>
+                                    <p class="text-xs text-indigo-300 uppercase font-semibold">Inglizcha Ta'rif:</p>
+                                    <p id="card-definition" class="text-sm sm:text-base font-medium text-slate-100 leading-snug">To make something better or less painful.</p>
+                                </div>
+                                <div class="p-3 rounded-xl bg-indigo-950/60 border border-indigo-700/50">
+                                    <p class="text-xs text-indigo-300 uppercase font-semibold">Misol gap:</p>
+                                    <p id="card-example" class="text-xs sm:text-sm italic text-slate-200 mt-1">"New measures were taken to ameliorate conditions."</p>
+                                </div>
+                            </div>
+                            <div class="text-center text-xs text-indigo-300">
+                                Qaytarish uchun bosing
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-4">
+                    <button onclick="prevCard()" class="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-100 active:scale-95 transition-all">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Oldingisi
+                    </button>
+
+                    <button id="card-master-btn" onclick="toggleCurrentMastered()" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white shadow-md active:scale-95 transition-all">
+                        <i class="fa-solid fa-check mr-1.5"></i> Yodlandi
+                    </button>
+
+                    <button onclick="nextCard()" class="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-100 active:scale-95 transition-all">
+                        Keyingisi <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+                <div class="text-center text-xs text-slate-400 font-medium" id="card-counter">
+                    Karta 1 / 10
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 3: ESSAY WRITING ANALYZER -->
+        <section id="tab-analyzer" class="hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">IELTS & SAT Writing Assistant</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Inshoingizni kiriting. Dastur so'zlar boyligini tahlil qilib, IELTS band ballini taxmin qiladi.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadSampleEssay()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100">
+                            Namuna matn
+                        </button>
+                    </div>
+                </div>
+
+                <textarea id="essay-input" oninput="analyzeEssay()" rows="9" placeholder="Inshoingizni shu yerga kiriting..."
+                    class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm leading-relaxed resize-y"></textarea>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">So'zlar soni</span>
+                        <span id="metric-words" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Gaplar soni</span>
+                        <span id="metric-sentences" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Taxminiy IELTS Band</span>
+                        <span id="metric-band" class="text-2xl font-black text-indigo-600 dark:text-indigo-400">-</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Lexical Richness</span>
+                        <span id="metric-diversity" class="text-2xl font-black text-slate-900 dark:text-white">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-4">
+                <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i> Lug'at Boyligini Oshirish Bo'yicha Tavsiyalar
+                </h3>
+                <div id="suggestions-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-700 text-center text-xs text-slate-400 col-span-2">
+                        Tahlil va tavsiyalarni ko'rish uchun matn kiriting.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 4: ADD CUSTOM WORD -->
+        <section id="tab-addword" class="hidden max-w-2xl mx-auto space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Yangi lug'at so'zini qo'shish</h2>
+                    <p class="text-xs text-slate-500">O'zingiz o'rganayotgan yangi so'zlarni bazangizga saqlab boring.</p>
+                </div>
+
+                <form id="add-word-form" onsubmit="handleAddNewWord(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Inglizcha So'z</label>
+                        <input type="text" id="new-word" required placeholder="Masalan: Ephemeral" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">So'z Turkumi (Part of speech)</label>
+                            <select id="new-pos" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <option value="noun">Noun (Ot)</option>
+                                <option value="verb">Verb (Fe'l)</option>
+                                <option value="adjective">Adjective (Sifat)</option>
+                                <option value="adverb">Adverb (Ravish)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Kategoriya</label>
+                            <select id="new-category" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <option value="IELTS Academic">IELTS Academic</option>
+                                <option value="SAT Writing">SAT Verbal</option>
+                                <option value="Shaxsiy">Shaxsiy So'zlar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">O'zbekcha Tarjimasi</label>
+                        <input type="text" id="new-uzbek" required placeholder="Masalan: Qisqa muddatli, o'tkinchi" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Inglizcha Ta'rifi</label>
+                        <input type="text" id="new-definition" required placeholder="Lasting for a very short time." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Misol Gap</label>
+                        <input type="text" id="new-example" required placeholder="Fame in the internet age is often ephemeral." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition-all active:scale-98">
+                        <i class="fa-solid fa-plus-circle mr-1"></i> So'zlar Bazasiga Qo'shish
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PWA INSTALLATION MODAL FOR iOS (iPhone) -->
+    <div id="ios-install-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center">
+                        <i class="fa-solid fa-mobile-screen text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-slate-900 dark:text-white">iPhone'ga o'rnatish</h3>
+                </div>
+                <button onclick="closeIosModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Ushbu ilovani iPhone ekraningizga qo'shish uchun quyidagi 2 ta bosqichni bajaring:
+            </p>
+            <ol class="text-xs text-slate-700 dark:text-slate-200 space-y-2 list-decimal list-inside font-medium bg-slate-50 dark:bg-slate-900 p-3 rounded-xl">
+                <li>Safari brauzerining pastki qismidagi <strong>"Ulashish" (Share)</strong> tugmasini bosing.</li>
+                <li>Menyudan <strong>"Bosh ekranga qo'shish" (Add to Home Screen)</strong> bandini tanlang.</li>
+            </ol>
+            <button onclick="closeIosModal()" class="w-full py-2.5 bg-indigo-600 text-white font-bold text-xs rounded-xl">Tushunarli</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DEFAULT VOCABULARY DATABASE ---
+        const initialVocab = [
+            { id: 1, word: "Ameliorate", pos: "verb", uzbek: "Yaxshilamoq, holatni tuzatmoq", definition: "To make something better or less painful.", example: "New environmental laws were introduced to ameliorate air quality.", category: "IELTS Academic" },
+            { id: 2, word: "Ubiquitous", pos: "adjective", uzbek: "Hamma joyda uchraydigan", definition: "Present, appearing, or found everywhere.", example: "Mobile phones have become ubiquitous in modern daily life.", category: "SAT Writing" },
+            { id: 3, word: "Pragmatic", pos: "adjective", uzbek: "Amaliy, realistik", definition: "Dealing with things sensibly based on practical considerations.", example: "A pragmatic approach to problem-solving yields better results.", category: "IELTS Academic" },
+            { id: 4, word: "Mitigate", pos: "verb", uzbek: "Yumshatmoq, kamaytirmoq", definition: "To make something less severe or harmful.", example: "Governments must implement strategies to mitigate climate change.", category: "IELTS Academic" },
+            { id: 5, word: "Elucidate", pos: "verb", uzbek: "Oydinlashtirmoq, tushuntirmoq", definition: "To make something clear; to explain thoroughly.", example: "The researcher presented data to elucidate the complex trend.", category: "SAT Writing" },
+            { id: 6, word: "Bolster", pos: "verb", uzbek: "Kuchaytirmoq, qo'llab-quvvatlamoq", definition: "To support, strengthen, or fortify.", example: "More investments are required to bolster the local education system.", category: "SAT Writing" },
+            { id: 7, word: "Exacerbate", pos: "verb", uzbek: "Yomonlashtirmoq", definition: "To make a problem or situation worse.", example: "Heavy traffic delays exacerbate stress levels among commuters.", category: "IELTS Academic" },
+            { id: 8, word: "Profound", pos: "adjective", uzbek: "Chuqur, teran", definition: "Very great or intense; having deep insight.", example: "The invention of the internet had a profound effect on global communication.", category: "IELTS Academic" },
+            { id: 9, word: "Plausible", pos: "adjective", uzbek: "Isbotlab bo'ladigan, ishonchli", definition: "Seeming reasonable or probable.", example: "Scientists provided a plausible explanation for the weather shift.", category: "SAT Writing" },
+            { id: 10, word: "Tenacious", pos: "adjective", uzbek: "Matonatli, tirishqoq", definition: "Tending to keep a firm hold of something; persistent.", example: "Her tenacious effort allowed her to score 1500+ on the SAT.", category: "SAT Writing" }
+        ];
+
+        const vocabularySuggestionsMap = {
+            "good": ["beneficial", "advantageous", "exemplary", "valuable"],
+            "bad": ["detrimental", "adverse", "substandard"],
+            "important": ["crucial", "paramount", "pivotal", "essential"],
+            "show": ["illustrate", "demonstrate", "elucidate"],
+            "increase": ["surge", "escalate", "proliferate"],
+            "decrease": ["dwindle", "decline", "diminish"],
+            "think": ["assert", "contend", "postulate"],
+            "big": ["substantial", "immense"],
+            "help": ["assist", "facilitate"],
+            "many": ["numerous", "countless"]
+        };
+
+        // --- APP STATE ---
+        let vocabularyData = JSON.parse(localStorage.getItem('studypro_words')) || initialVocab;
+        let masteredWordIds = JSON.parse(localStorage.getItem('studypro_mastered_words')) || [];
+        let essaysAnalyzedCount = parseInt(localStorage.getItem('studypro_essays_count')) || 0;
+        let currentCardIndex = 0;
+        let currentVocabFilter = 'all';
+        let isCardFlipped = false;
+        let deferredPrompt = null;
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderDashboard();
+            renderVocabulary();
+            initPWA();
+        });
+
+        // --- PWA INSTALLATION LOGIC ---
+        function initPWA() {
+            // Listen for Android/Chrome install prompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const btn = document.getElementById('install-pwa-btn');
+                if (btn) btn.classList.remove('hidden');
+            });
+
+            // Service worker inline registration
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('activate', e => self.clients.claim());
+                    self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+                `;
+                const blob = new Blob([swCode], { type: 'text/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+            }
+        }
+
+        function promptInstallApp() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('install-pwa-btn').classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            } else if (isIOS) {
+                document.getElementById('ios-install-modal').classList.remove('hidden');
+            } else {
+                alert("Ilova brauzeringizda tayyor holatda ishlamoqda. Ekraningizdagi brauzer menyusidan 'Bosh ekranga qo'shish' tugmasini bosing.");
+            }
+        }
+
+        function closeIosModal() {
+            document.getElementById('ios-install-modal').classList.add('hidden');
+        }
+
+        // --- THEME ---
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200";
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm";
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            const total = vocabularyData.length;
+            const mastered = masteredWordIds.length;
+            const learning = total - mastered;
+            const percent = total > 0 ? Math.round((mastered / total) * 100) : 0;
+
+            document.getElementById('dash-mastered-count').innerText = mastered;
+            document.getElementById('dash-learning-count').innerText = learning;
+            document.getElementById('dash-total-words').innerText = `/ ${total} ta`;
+            document.getElementById('dash-words-progress').style.width = `${percent}%`;
+            document.getElementById('dash-essays-count').innerText = essaysAnalyzedCount;
+
+            // Render recommended cards
+            const container = document.getElementById('recommended-words-container');
+            container.innerHTML = '';
+            vocabularyData.slice(0, 4).forEach(item => {
+                const isMastered = masteredWordIds.includes(item.id);
+                container.innerHTML += `
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/40 border border-slate-200/60 dark:border-slate-700/60 flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">${item.category}</span>
+                            <h4 class="font-extrabold text-base text-slate-900 dark:text-white">${item.word}</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-300 mt-0.5">${item.uzbek}</p>
+                        </div>
+                        <span class="text-xs ${isMastered ? 'text-emerald-500 font-bold' : 'text-slate-400'}">
+                            ${isMastered ? '<i class="fa-solid fa-check-circle text-base"></i>' : '<i class="fa-regular fa-circle text-base"></i>'}
+                        </span>
+                    </div>
+                `;
+            });
+        }
+
+        // --- FLASHCARDS ---
+        function getFilteredWords() {
+            const query = document.getElementById('vocab-search').value.toLowerCase();
+            return vocabularyData.filter(item => {
+                const isMastered = masteredWordIds.includes(item.id);
+                const matchesCategory = currentVocabFilter === 'all' || 
+                                        (currentVocabFilter === 'mastered' && isMastered) ||
+                                        (currentVocabFilter === 'learning' && !isMastered);
+                const matchesQuery = item.word.toLowerCase().includes(query) || item.uzbek.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+        }
+
+        function renderVocabulary() {
+            const list = getFilteredWords();
+            if (currentCardIndex >= list.length) currentCardIndex = 0;
+
+            if (list.length === 0) {
+                document.getElementById('flashcard-container').classList.add('opacity-40');
+                document.getElementById('card-word').innerText = "So'z topilmadi";
+                document.getElementById('card-counter').innerText = "0 / 0";
+                return;
+            }
+            document.getElementById('flashcard-container').classList.remove('opacity-40');
+
+            const item = list[currentCardIndex];
+            document.getElementById('card-word').innerText = item.word;
+            document.getElementById('card-pos').innerText = item.pos;
+            document.getElementById('card-uzbek').innerText = `(${item.uzbek})`;
+            document.getElementById('card-category-badge').innerText = item.category;
+            document.getElementById('card-definition').innerText = item.definition;
+            document.getElementById('card-example').innerText = `"${item.example}"`;
+            document.getElementById('card-counter').innerText = `Karta ${currentCardIndex + 1} / ${list.length}`;
+
+            if (isCardFlipped) {
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+                isCardFlipped = false;
+            }
+
+            const isMastered = masteredWordIds.includes(item.id);
+            const masterBtn = document.getElementById('card-master-btn');
+            if (isMastered) {
+                masterBtn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all";
+                masterBtn.innerHTML = `<i class="fa-solid fa-check-double text-emerald-500 mr-1.5"></i> Yodlandi`;
+            } else {
+                masterBtn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white shadow-md transition-all";
+                masterBtn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i> Yodlandi deb belgilash`;
+            }
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard-inner').classList.toggle('rotate-y-180');
+            isCardFlipped = !isCardFlipped;
+        }
+
+        function nextCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            currentCardIndex = (currentCardIndex + 1) % list.length;
+            renderVocabulary();
+        }
+
+        function prevCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            currentCardIndex = (currentCardIndex - 1 + list.length) % list.length;
+            renderVocabulary();
+        }
+
+        function toggleCurrentMastered() {
+            const list = getFilteredWords();
+            const currentItem = list[currentCardIndex];
+            if (!currentItem) return;
+
+            if (masteredWordIds.includes(currentItem.id)) {
+                masteredWordIds = masteredWordIds.filter(id => id !== currentItem.id);
+            } else {
+                masteredWordIds.push(currentItem.id);
+            }
+            localStorage.setItem('studypro_mastered_words', JSON.stringify(masteredWordIds));
+            renderDashboard();
+            renderVocabulary();
+        }
+
+        function filterVocabCategory(cat) {
+            currentVocabFilter = cat;
+            renderVocabulary();
+        }
+
+        function speakCurrentWord(e) {
+            e.stopPropagation();
+            const list = getFilteredWords();
+            const item = list[currentCardIndex];
+            if (!item) return;
+
+            const utterance = new SpeechSynthesisUtterance(item.word);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- ESSAY ANALYZER ---
+        function analyzeEssay() {
+            const text = document.getElementById('essay-input').value.trim();
+            if (!text) {
+                document.getElementById('metric-words').innerText = "0";
+                document.getElementById('metric-sentences').innerText = "0";
+                document.getElementById('metric-band').innerText = "-";
+                document.getElementById('metric-diversity').innerText = "-";
+                document.getElementById('suggestions-list').innerHTML = `<div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-700 text-center text-xs text-slate-400 col-span-2">Tahlil va tavsiyalarni ko'rish uchun matn kiriting.</div>`;
+                return;
+            }
+
+            const words = text.match(/\b[-'a-zA-Z]+\b/g) || [];
+            const wordCount = words.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const sentenceCount = sentences.length;
+
+            document.getElementById('metric-words').innerText = wordCount;
+            document.getElementById('metric-sentences').innerText = sentenceCount;
+
+            let estimatedBand = "5.0 - 5.5";
+            if (wordCount > 250 && sentenceCount >= 10) estimatedBand = "6.5 - 7.0";
+            if (wordCount > 300 && sentenceCount >= 14) estimatedBand = "7.5 - 8.5";
+            document.getElementById('metric-band').innerText = estimatedBand;
+
+            const uniqueWords = new Set(words.map(w => w.toLowerCase()));
+            const lexicalRichness = wordCount > 0 ? Math.round((uniqueWords.size / wordCount) * 100) : 0;
+            document.getElementById('metric-diversity').innerText = `${lexicalRichness}%`;
+
+            // Suggestions
+            const lowerText = text.toLowerCase();
+            const foundSuggestions = [];
+            for (const [simpleWord, advancedList] of Object.entries(vocabularySuggestionsMap)) {
+                const regex = new RegExp(`\\b${simpleWord}\\b`, 'g');
+                const matches = lowerText.match(regex);
+                if (matches) {
+                    foundSuggestions.push({ simple: simpleWord, count: matches.length, replacements: advancedList });
+                }
+            }
+
+            const suggestionsContainer = document.getElementById('suggestions-list');
+            if (foundSuggestions.length === 0) {
+                suggestionsContainer.innerHTML = `<div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center text-xs text-emerald-600 dark:text-emerald-400 col-span-2">Ajoyib! Takrorlangan oddiy so'zlar topilmadi.</div>`;
+            } else {
+                suggestionsContainer.innerHTML = '';
+                foundSuggestions.forEach(item => {
+                    suggestionsContainer.innerHTML += `
+                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/60 px-2 py-0.5 rounded-md">
+                                    "${item.simple}" (${item.count} marta)
+                                </span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                ${item.replacements.map(rep => `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800">${rep}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function loadSampleEssay() {
+            document.getElementById('essay-input').value = "In recent years, climate change has become a big problem. It is very important for governments to show effective solutions to decrease pollution. Many people think individual efforts are not good enough.";
+            analyzeEssay();
+        }
+
+        // --- ADD CUSTOM WORD ---
+        function handleAddNewWord(e) {
+            e.preventDefault();
+            const newObj = {
+                id: Date.now(),
+                word: document.getElementById('new-word').value.trim(),
+                pos: document.getElementById('new-pos').value,
+                category: document.getElementById('new-category').value,
+                uzbek: document.getElementById('new-uzbek').value.trim(),
+                definition: document.getElementById('new-definition').value.trim(),
+                example: document.getElementById('new-example').value.trim()
+            };
+
+            vocabularyData.unshift(newObj);
+            localStorage.setItem('studypro_words', JSON.stringify(vocabularyData));
+            
+            document.getElementById('add-word-form').reset();
+            alert("Yangi so'z muvaffaqiyatli qo'shildi!");
+            renderDashboard();
+            renderVocabulary();
+            switchTab('vocabulary');
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="uz" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudyPro: SAT & IELTS Assistant</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StudyPro">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200 selection:bg-indigo-500 selection:text-white">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">StudyPro</span>
+                        <span class="text-[10px] uppercase font-bold tracking-wider block text-slate-400 -mt-1">SAT & IELTS</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/50">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm">
+                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
+                    </button>
+                    <button onclick="switchTab('vocabulary')" id="nav-vocabulary" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i>Flashcards
+                    </button>
+                    <button onclick="switchTab('analyzer')" id="nav-analyzer" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Essay Analyzer
+                    </button>
+                    <button onclick="switchTab('addword')" id="nav-addword" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
+                        <i class="fa-solid fa-plus-circle mr-1.5"></i>So'z Qo'shish
+                    </button>
+                </nav>
+
+                <!-- Actions / Install App & Dark Mode Toggle -->
+                <div class="flex items-center gap-2">
+                    <!-- INSTALL PWA BUTTON -->
+                    <button id="install-pwa-btn" onclick="promptInstallApp()" class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
+                        <i class="fa-solid fa-download"></i>
+                        <span class="hidden sm:inline">Telefonga o'rnatish</span>
+                    </button>
+
+                    <button id="theme-toggle" onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                    </button>
+
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-chart-pie w-6"></i>Dashboard
+            </button>
+            <button onclick="switchTab('vocabulary'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-layer-group w-6"></i>Flashcards & Lug'at
+            </button>
+            <button onclick="switchTab('analyzer'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-wand-magic-sparkles w-6"></i>Essay Analyzer
+            </button>
+            <button onclick="switchTab('addword'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
+                <i class="fa-solid fa-plus-circle w-6"></i>Yangi So'z Qo'shish
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="space-y-8">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-800 text-white p-6 sm:p-8 shadow-xl shadow-indigo-500/10">
+                <div class="relative z-10 max-w-2xl space-y-3">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                        <i class="fa-solid fa-fire text-amber-300"></i> <span id="streak-text">4 KUNLIK STREAK!</span>
+                    </span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">O'rganishda davom eting!</h1>
+                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+                        IELTS 7.5+ va SAT 1450+ maqsadlaringiz uchun har kuni kamida 10 ta yangi so'z yodlang.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('vocabulary')" class="px-5 py-2.5 bg-white text-indigo-700 hover:bg-indigo-50 font-bold text-sm rounded-xl transition-all shadow-md">
+                            Flashcards Mashq qilish <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Yodlanganlar</span>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-check-double text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span id="dash-mastered-count" class="text-3xl font-extrabold text-slate-900 dark:text-white">0</span>
+                        <span id="dash-total-words" class="text-xs text-slate-500">/ 0 ta</span>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mt-3 overflow-hidden">
+                        <div id="dash-words-progress" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">O'rganilmoqda</span>
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                            <i class="fa-solid fa-clock text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span id="dash-learning-count" class="text-3xl font-extrabold text-slate-900 dark:text-white">0</span>
+                        <span class="text-xs text-slate-500">ta so'z</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3">Takrorlash kutilmoqda</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Tahlil qilingan insholar</span>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                            <i class="fa-solid fa-file-pen text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span id="dash-essays-count" class="text-3xl font-extrabold text-slate-900 dark:text-white">0</span>
+                        <span class="text-xs text-slate-500">ta insho</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3">Writing mashqi</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800/90 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Target Score</span>
+                        <div class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/50 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+                            <i class="fa-solid fa-bullseye text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-3">
+                        <span class="text-3xl font-extrabold text-slate-900 dark:text-white">IELTS 7.5+</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3">SAT Maqsad: 1450+</p>
+                </div>
+            </div>
+
+            <!-- Recommended Words & Quick Preview -->
+            <div class="bg-white dark:bg-slate-800/90 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-500"></i> Bugungi muhim lug'atlar
+                    </h3>
+                    <button onclick="switchTab('vocabulary')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+                        Barchasini ko'rish &rarr;
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="recommended-words-container">
+                    <!-- Dynamic Words -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 2: FLASHCARDS & VOCABULARY -->
+        <section id="tab-vocabulary" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                <div class="relative flex-1 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="vocab-search" oninput="renderVocabulary()" placeholder="So'zlarni qidirish..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="filterVocabCategory('all')" class="filter-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white transition-all">Barchasi</button>
+                    <button onclick="filterVocabCategory('learning')" class="filter-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-all">O'rganilmoqda</button>
+                    <button onclick="filterVocabCategory('mastered')" class="filter-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition-all">Yodlanganlar</button>
+                </div>
+            </div>
+
+            <!-- Flashcard Interactive View -->
+            <div id="flashcard-view" class="max-w-xl mx-auto space-y-6">
+                <div id="flashcard-container" onclick="flipCard()" class="perspective-1000 h-80 w-full cursor-pointer group">
+                    <div id="flashcard-inner" class="transform-style-3d duration-500 relative w-full h-full rounded-3xl shadow-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 flex flex-col justify-between">
+                        
+                        <!-- CARD FRONT -->
+                        <div class="backface-hidden absolute inset-0 p-8 flex flex-col justify-between rounded-3xl bg-white dark:bg-slate-800">
+                            <div class="flex justify-between items-center">
+                                <span id="card-category-badge" class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">IELTS Academic</span>
+                                <span class="text-xs text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> Bosing</span>
+                            </div>
+                            <div class="text-center my-auto space-y-2">
+                                <h2 id="card-word" class="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Ameliorate</h2>
+                                <p id="card-pos" class="text-sm font-semibold italic text-indigo-500">verb</p>
+                                <p id="card-uzbek" class="text-base font-medium text-slate-500 dark:text-slate-400 mt-2">(Yaxshilamoq)</p>
+                            </div>
+                            <div class="text-center text-xs text-slate-400">
+                                Ta'rifini ko'rish uchun kartani og'iring &rarr;
+                            </div>
+                        </div>
+
+                        <!-- CARD BACK -->
+                        <div class="backface-hidden rotate-y-180 absolute inset-0 p-8 flex flex-col justify-between rounded-3xl bg-indigo-900 text-white shadow-xl">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold uppercase text-indigo-300">Ta'rif & Misol</span>
+                                <button onclick="speakCurrentWord(event)" class="w-8 h-8 rounded-full bg-indigo-800 hover:bg-indigo-700 flex items-center justify-center text-indigo-200 hover:text-white">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-4 my-auto">
+                                <div>
+                                    <p class="text-xs text-indigo-300 uppercase font-semibold">Inglizcha Ta'rif:</p>
+                                    <p id="card-definition" class="text-sm sm:text-base font-medium text-slate-100 leading-snug">To make something better or less painful.</p>
+                                </div>
+                                <div class="p-3 rounded-xl bg-indigo-950/60 border border-indigo-700/50">
+                                    <p class="text-xs text-indigo-300 uppercase font-semibold">Misol gap:</p>
+                                    <p id="card-example" class="text-xs sm:text-sm italic text-slate-200 mt-1">"New measures were taken to ameliorate conditions."</p>
+                                </div>
+                            </div>
+                            <div class="text-center text-xs text-indigo-300">
+                                Qaytarish uchun bosing
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-4">
+                    <button onclick="prevCard()" class="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-100 active:scale-95 transition-all">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Oldingisi
+                    </button>
+
+                    <button id="card-master-btn" onclick="toggleCurrentMastered()" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white shadow-md active:scale-95 transition-all">
+                        <i class="fa-solid fa-check mr-1.5"></i> Yodlandi
+                    </button>
+
+                    <button onclick="nextCard()" class="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-100 active:scale-95 transition-all">
+                        Keyingisi <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+                <div class="text-center text-xs text-slate-400 font-medium" id="card-counter">
+                    Karta 1 / 10
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 3: ESSAY WRITING ANALYZER -->
+        <section id="tab-analyzer" class="hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">IELTS & SAT Writing Assistant</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Inshoingizni kiriting. Dastur so'zlar boyligini tahlil qilib, IELTS band ballini taxmin qiladi.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadSampleEssay()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100">
+                            Namuna matn
+                        </button>
+                    </div>
+                </div>
+
+                <textarea id="essay-input" oninput="analyzeEssay()" rows="9" placeholder="Inshoingizni shu yerga kiriting..."
+                    class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm leading-relaxed resize-y"></textarea>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">So'zlar soni</span>
+                        <span id="metric-words" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Gaplar soni</span>
+                        <span id="metric-sentences" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Taxminiy IELTS Band</span>
+                        <span id="metric-band" class="text-2xl font-black text-indigo-600 dark:text-indigo-400">-</span>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-xs text-slate-400 font-medium block">Lexical Richness</span>
+                        <span id="metric-diversity" class="text-2xl font-black text-slate-900 dark:text-white">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-4">
+                <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i> Lug'at Boyligini Oshirish Bo'yicha Tavsiyalar
+                </h3>
+                <div id="suggestions-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-700 text-center text-xs text-slate-400 col-span-2">
+                        Tahlil va tavsiyalarni ko'rish uchun matn kiriting.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 4: ADD CUSTOM WORD -->
+        <section id="tab-addword" class="hidden max-w-2xl mx-auto space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Yangi lug'at so'zini qo'shish</h2>
+                    <p class="text-xs text-slate-500">O'zingiz o'rganayotgan yangi so'zlarni bazangizga saqlab boring.</p>
+                </div>
+
+                <form id="add-word-form" onsubmit="handleAddNewWord(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Inglizcha So'z</label>
+                        <input type="text" id="new-word" required placeholder="Masalan: Ephemeral" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">So'z Turkumi (Part of speech)</label>
+                            <select id="new-pos" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <option value="noun">Noun (Ot)</option>
+                                <option value="verb">Verb (Fe'l)</option>
+                                <option value="adjective">Adjective (Sifat)</option>
+                                <option value="adverb">Adverb (Ravish)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Kategoriya</label>
+                            <select id="new-category" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <option value="IELTS Academic">IELTS Academic</option>
+                                <option value="SAT Writing">SAT Verbal</option>
+                                <option value="Shaxsiy">Shaxsiy So'zlar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">O'zbekcha Tarjimasi</label>
+                        <input type="text" id="new-uzbek" required placeholder="Masalan: Qisqa muddatli, o'tkinchi" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Inglizcha Ta'rifi</label>
+                        <input type="text" id="new-definition" required placeholder="Lasting for a very short time." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Misol Gap</label>
+                        <input type="text" id="new-example" required placeholder="Fame in the internet age is often ephemeral." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition-all active:scale-98">
+                        <i class="fa-solid fa-plus-circle mr-1"></i> So'zlar Bazasiga Qo'shish
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PWA INSTALLATION MODAL FOR iOS (iPhone) -->
+    <div id="ios-install-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center">
+                        <i class="fa-solid fa-mobile-screen text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-slate-900 dark:text-white">iPhone'ga o'rnatish</h3>
+                </div>
+                <button onclick="closeIosModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Ushbu ilovani iPhone ekraningizga qo'shish uchun quyidagi 2 ta bosqichni bajaring:
+            </p>
+            <ol class="text-xs text-slate-700 dark:text-slate-200 space-y-2 list-decimal list-inside font-medium bg-slate-50 dark:bg-slate-900 p-3 rounded-xl">
+                <li>Safari brauzerining pastki qismidagi <strong>"Ulashish" (Share)</strong> tugmasini bosing.</li>
+                <li>Menyudan <strong>"Bosh ekranga qo'shish" (Add to Home Screen)</strong> bandini tanlang.</li>
+            </ol>
+            <button onclick="closeIosModal()" class="w-full py-2.5 bg-indigo-600 text-white font-bold text-xs rounded-xl">Tushunarli</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DEFAULT VOCABULARY DATABASE ---
+        const initialVocab = [
+            { id: 1, word: "Ameliorate", pos: "verb", uzbek: "Yaxshilamoq, holatni tuzatmoq", definition: "To make something better or less painful.", example: "New environmental laws were introduced to ameliorate air quality.", category: "IELTS Academic" },
+            { id: 2, word: "Ubiquitous", pos: "adjective", uzbek: "Hamma joyda uchraydigan", definition: "Present, appearing, or found everywhere.", example: "Mobile phones have become ubiquitous in modern daily life.", category: "SAT Writing" },
+            { id: 3, word: "Pragmatic", pos: "adjective", uzbek: "Amaliy, realistik", definition: "Dealing with things sensibly based on practical considerations.", example: "A pragmatic approach to problem-solving yields better results.", category: "IELTS Academic" },
+            { id: 4, word: "Mitigate", pos: "verb", uzbek: "Yumshatmoq, kamaytirmoq", definition: "To make something less severe or harmful.", example: "Governments must implement strategies to mitigate climate change.", category: "IELTS Academic" },
+            { id: 5, word: "Elucidate", pos: "verb", uzbek: "Oydinlashtirmoq, tushuntirmoq", definition: "To make something clear; to explain thoroughly.", example: "The researcher presented data to elucidate the complex trend.", category: "SAT Writing" },
+            { id: 6, word: "Bolster", pos: "verb", uzbek: "Kuchaytirmoq, qo'llab-quvvatlamoq", definition: "To support, strengthen, or fortify.", example: "More investments are required to bolster the local education system.", category: "SAT Writing" },
+            { id: 7, word: "Exacerbate", pos: "verb", uzbek: "Yomonlashtirmoq", definition: "To make a problem or situation worse.", example: "Heavy traffic delays exacerbate stress levels among commuters.", category: "IELTS Academic" },
+            { id: 8, word: "Profound", pos: "adjective", uzbek: "Chuqur, teran", definition: "Very great or intense; having deep insight.", example: "The invention of the internet had a profound effect on global communication.", category: "IELTS Academic" },
+            { id: 9, word: "Plausible", pos: "adjective", uzbek: "Isbotlab bo'ladigan, ishonchli", definition: "Seeming reasonable or probable.", example: "Scientists provided a plausible explanation for the weather shift.", category: "SAT Writing" },
+            { id: 10, word: "Tenacious", pos: "adjective", uzbek: "Matonatli, tirishqoq", definition: "Tending to keep a firm hold of something; persistent.", example: "Her tenacious effort allowed her to score 1500+ on the SAT.", category: "SAT Writing" }
+        ];
+
+        const vocabularySuggestionsMap = {
+            "good": ["beneficial", "advantageous", "exemplary", "valuable"],
+            "bad": ["detrimental", "adverse", "substandard"],
+            "important": ["crucial", "paramount", "pivotal", "essential"],
+            "show": ["illustrate", "demonstrate", "elucidate"],
+            "increase": ["surge", "escalate", "proliferate"],
+            "decrease": ["dwindle", "decline", "diminish"],
+            "think": ["assert", "contend", "postulate"],
+            "big": ["substantial", "immense"],
+            "help": ["assist", "facilitate"],
+            "many": ["numerous", "countless"]
+        };
+
+        // --- APP STATE ---
+        let vocabularyData = JSON.parse(localStorage.getItem('studypro_words')) || initialVocab;
+        let masteredWordIds = JSON.parse(localStorage.getItem('studypro_mastered_words')) || [];
+        let essaysAnalyzedCount = parseInt(localStorage.getItem('studypro_essays_count')) || 0;
+        let currentCardIndex = 0;
+        let currentVocabFilter = 'all';
+        let isCardFlipped = false;
+        let deferredPrompt = null;
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderDashboard();
+            renderVocabulary();
+            initPWA();
+        });
+
+        // --- PWA INSTALLATION LOGIC ---
+        function initPWA() {
+            // Listen for Android/Chrome install prompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const btn = document.getElementById('install-pwa-btn');
+                if (btn) btn.classList.remove('hidden');
+            });
+
+            // Service worker inline registration
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('activate', e => self.clients.claim());
+                    self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+                `;
+                const blob = new Blob([swCode], { type: 'text/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+            }
+        }
+
+        function promptInstallApp() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('install-pwa-btn').classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            } else if (isIOS) {
+                document.getElementById('ios-install-modal').classList.remove('hidden');
+            } else {
+                alert("Ilova brauzeringizda tayyor holatda ishlamoqda. Ekraningizdagi brauzer menyusidan 'Bosh ekranga qo'shish' tugmasini bosing.");
+            }
+        }
+
+        function closeIosModal() {
+            document.getElementById('ios-install-modal').classList.add('hidden');
+        }
+
+        // --- THEME ---
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200";
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm";
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            const total = vocabularyData.length;
+            const mastered = masteredWordIds.length;
+            const learning = total - mastered;
+            const percent = total > 0 ? Math.round((mastered / total) * 100) : 0;
+
+            document.getElementById('dash-mastered-count').innerText = mastered;
+            document.getElementById('dash-learning-count').innerText = learning;
+            document.getElementById('dash-total-words').innerText = `/ ${total} ta`;
+            document.getElementById('dash-words-progress').style.width = `${percent}%`;
+            document.getElementById('dash-essays-count').innerText = essaysAnalyzedCount;
+
+            // Render recommended cards
+            const container = document.getElementById('recommended-words-container');
+            container.innerHTML = '';
+            vocabularyData.slice(0, 4).forEach(item => {
+                const isMastered = masteredWordIds.includes(item.id);
+                container.innerHTML += `
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/40 border border-slate-200/60 dark:border-slate-700/60 flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">${item.category}</span>
+                            <h4 class="font-extrabold text-base text-slate-900 dark:text-white">${item.word}</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-300 mt-0.5">${item.uzbek}</p>
+                        </div>
+                        <span class="text-xs ${isMastered ? 'text-emerald-500 font-bold' : 'text-slate-400'}">
+                            ${isMastered ? '<i class="fa-solid fa-check-circle text-base"></i>' : '<i class="fa-regular fa-circle text-base"></i>'}
+                        </span>
+                    </div>
+                `;
+            });
+        }
+
+        // --- FLASHCARDS ---
+        function getFilteredWords() {
+            const query = document.getElementById('vocab-search').value.toLowerCase();
+            return vocabularyData.filter(item => {
+                const isMastered = masteredWordIds.includes(item.id);
+                const matchesCategory = currentVocabFilter === 'all' || 
+                                        (currentVocabFilter === 'mastered' && isMastered) ||
+                                        (currentVocabFilter === 'learning' && !isMastered);
+                const matchesQuery = item.word.toLowerCase().includes(query) || item.uzbek.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+        }
+
+        function renderVocabulary() {
+            const list = getFilteredWords();
+            if (currentCardIndex >= list.length) currentCardIndex = 0;
+
+            if (list.length === 0) {
+                document.getElementById('flashcard-container').classList.add('opacity-40');
+                document.getElementById('card-word').innerText = "So'z topilmadi";
+                document.getElementById('card-counter').innerText = "0 / 0";
+                return;
+            }
+            document.getElementById('flashcard-container').classList.remove('opacity-40');
+
+            const item = list[currentCardIndex];
+            document.getElementById('card-word').innerText = item.word;
+            document.getElementById('card-pos').innerText = item.pos;
+            document.getElementById('card-uzbek').innerText = `(${item.uzbek})`;
+            document.getElementById('card-category-badge').innerText = item.category;
+            document.getElementById('card-definition').innerText = item.definition;
+            document.getElementById('card-example').innerText = `"${item.example}"`;
+            document.getElementById('card-counter').innerText = `Karta ${currentCardIndex + 1} / ${list.length}`;
+
+            if (isCardFlipped) {
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+                isCardFlipped = false;
+            }
+
+            const isMastered = masteredWordIds.includes(item.id);
+            const masterBtn = document.getElementById('card-master-btn');
+            if (isMastered) {
+                masterBtn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all";
+                masterBtn.innerHTML = `<i class="fa-solid fa-check-double text-emerald-500 mr-1.5"></i> Yodlandi`;
+            } else {
+                masterBtn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white shadow-md transition-all";
+                masterBtn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i> Yodlandi deb belgilash`;
+            }
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard-inner').classList.toggle('rotate-y-180');
+            isCardFlipped = !isCardFlipped;
+        }
+
+        function nextCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            currentCardIndex = (currentCardIndex + 1) % list.length;
+            renderVocabulary();
+        }
+
+        function prevCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            currentCardIndex = (currentCardIndex - 1 + list.length) % list.length;
+            renderVocabulary();
+        }
+
+        function toggleCurrentMastered() {
+            const list = getFilteredWords();
+            const currentItem = list[currentCardIndex];
+            if (!currentItem) return;
+
+            if (masteredWordIds.includes(currentItem.id)) {
+                masteredWordIds = masteredWordIds.filter(id => id !== currentItem.id);
+            } else {
+                masteredWordIds.push(currentItem.id);
+            }
+            localStorage.setItem('studypro_mastered_words', JSON.stringify(masteredWordIds));
+            renderDashboard();
+            renderVocabulary();
+        }
+
+        function filterVocabCategory(cat) {
+            currentVocabFilter = cat;
+            renderVocabulary();
+        }
+
+        function speakCurrentWord(e) {
+            e.stopPropagation();
+            const list = getFilteredWords();
+            const item = list[currentCardIndex];
+            if (!item) return;
+
+            const utterance = new SpeechSynthesisUtterance(item.word);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- ESSAY ANALYZER ---
+        function analyzeEssay() {
+            const text = document.getElementById('essay-input').value.trim();
+            if (!text) {
+                document.getElementById('metric-words').innerText = "0";
+                document.getElementById('metric-sentences').innerText = "0";
+                document.getElementById('metric-band').innerText = "-";
+                document.getElementById('metric-diversity').innerText = "-";
+                document.getElementById('suggestions-list').innerHTML = `<div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-700 text-center text-xs text-slate-400 col-span-2">Tahlil va tavsiyalarni ko'rish uchun matn kiriting.</div>`;
+                return;
+            }
+
+            const words = text.match(/\b[-'a-zA-Z]+\b/g) || [];
+            const wordCount = words.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const sentenceCount = sentences.length;
+
+            document.getElementById('metric-words').innerText = wordCount;
+            document.getElementById('metric-sentences').innerText = sentenceCount;
+
+            let estimatedBand = "5.0 - 5.5";
+            if (wordCount > 250 && sentenceCount >= 10) estimatedBand = "6.5 - 7.0";
+            if (wordCount > 300 && sentenceCount >= 14) estimatedBand = "7.5 - 8.5";
+            document.getElementById('metric-band').innerText = estimatedBand;
+
+            const uniqueWords = new Set(words.map(w => w.toLowerCase()));
+            const lexicalRichness = wordCount > 0 ? Math.round((uniqueWords.size / wordCount) * 100) : 0;
+            document.getElementById('metric-diversity').innerText = `${lexicalRichness}%`;
+
+            // Suggestions
+            const lowerText = text.toLowerCase();
+            const foundSuggestions = [];
+            for (const [simpleWord, advancedList] of Object.entries(vocabularySuggestionsMap)) {
+                const regex = new RegExp(`\\b${simpleWord}\\b`, 'g');
+                const matches = lowerText.match(regex);
+                if (matches) {
+                    foundSuggestions.push({ simple: simpleWord, count: matches.length, replacements: advancedList });
+                }
+            }
+
+            const suggestionsContainer = document.getElementById('suggestions-list');
+            if (foundSuggestions.length === 0) {
+                suggestionsContainer.innerHTML = `<div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center text-xs text-emerald-600 dark:text-emerald-400 col-span-2">Ajoyib! Takrorlangan oddiy so'zlar topilmadi.</div>`;
+            } else {
+                suggestionsContainer.innerHTML = '';
+                foundSuggestions.forEach(item => {
+                    suggestionsContainer.innerHTML += `
+                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/60 px-2 py-0.5 rounded-md">
+                                    "${item.simple}" (${item.count} marta)
+                                </span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                ${item.replacements.map(rep => `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800">${rep}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function loadSampleEssay() {
+            document.getElementById('essay-input').value = "In recent years, climate change has become a big problem. It is very important for governments to show effective solutions to decrease pollution. Many people think individual efforts are not good enough.";
+            analyzeEssay();
+        }
+
+        // --- ADD CUSTOM WORD ---
+        function handleAddNewWord(e) {
+            e.preventDefault();
+            const newObj = {
+                id: Date.now(),
+                word: document.getElementById('new-word').value.trim(),
+                pos: document.getElementById('new-pos').value,
+                category: document.getElementById('new-category').value,
+                uzbek: document.getElementById('new-uzbek').value.trim(),
+                definition: document.getElementById('new-definition').value.trim(),
+                example: document.getElementById('new-example').value.trim()
+            };
+
+            vocabularyData.unshift(newObj);
+            localStorage.setItem('studypro_words', JSON.stringify(vocabularyData));
+            
+            document.getElementById('add-word-form').reset();
+            alert("Yangi so'z muvaffaqiyatli qo'shildi!");
+            renderDashboard();
+            renderVocabulary();
+            switchTab('vocabulary');
+        }
+    </script>
+<footer>Muallif: Kholmurot Turakulov</footer>
+</body>
+</html>
