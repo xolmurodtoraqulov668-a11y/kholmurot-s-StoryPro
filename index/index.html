@@ -40,27 +40,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); }
         ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.4); border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200 selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
 
     <!-- TOP NAVIGATION BAR -->
     <header class="sticky top-0 z-50 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                
-                <!-- BRAND LOGO & TITLE -->
+                <!-- LOGO -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
                         <i class="fa-solid fa-graduation-cap text-lg"></i>
@@ -73,183 +65,186 @@
 
                 <!-- Desktop Navigation Tabs -->
                 <nav class="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/50">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm">
-                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
-                    </button>
-                    <button onclick="switchTab('reading')" id="nav-reading" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
-                        <i class="fa-solid fa-book-open mr-1.5"></i>Reading
-                    </button>
-                    <button onclick="switchTab('vocabulary')" id="nav-vocabulary" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
-                        <i class="fa-solid fa-layer-group mr-1.5"></i>Flashcards
-                    </button>
-                    <button onclick="switchTab('analyzer')" id="nav-analyzer" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
-                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Essay Analyzer
-                    </button>
-                    <button onclick="switchTab('addword')" id="nav-addword" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200">
-                        <i class="fa-solid fa-plus-circle mr-1.5"></i>So'z Qo'shish
-                    </button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm transition-all">Dashboard</button>
+                    <button onclick="switchTab('reading')" id="nav-reading" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all">Reading Tests</button>
+                    <button onclick="switchTab('vocabulary')" id="nav-vocabulary" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all">Flashcards</button>
+                    <button onclick="switchTab('analyzer')" id="nav-analyzer" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all">Essay Analyzer</button>
                 </nav>
 
-                <!-- Actions / Install App & Dark Mode Toggle -->
                 <div class="flex items-center gap-2">
-                    <button id="install-pwa-btn" onclick="promptInstallApp()" class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
-                        <i class="fa-solid fa-download"></i>
-                        <span class="hidden sm:inline">Telefonga o'rnatish</span>
-                    </button>
-
-                    <button id="theme-toggle" onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors">
+                    <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
                         <i class="fa-solid fa-moon dark:hidden"></i>
                         <i class="fa-solid fa-sun hidden dark:block"></i>
                     </button>
-
-                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
-                        <i class="fa-solid fa-bars text-lg"></i>
-                    </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Mobile Navigation Menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1">
-            <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
-                <i class="fa-solid fa-chart-pie w-6"></i>Dashboard
-            </button>
-            <button onclick="switchTab('reading'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
-                <i class="fa-solid fa-book-open w-6"></i>Reading Practice
-            </button>
-            <button onclick="switchTab('vocabulary'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
-                <i class="fa-solid fa-layer-group w-6"></i>Flashcards & Lug'at
-            </button>
-            <button onclick="switchTab('analyzer'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
-                <i class="fa-solid fa-wand-magic-sparkles w-6"></i>Essay Analyzer
-            </button>
-            <button onclick="switchTab('addword'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600">
-                <i class="fa-solid fa-plus-circle w-6"></i>Yangi So'z Qo'shish
-            </button>
         </div>
     </header>
 
-    <!-- MAIN CONTENT CONTAINER -->
+    <!-- MAIN CONTENT -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         <!-- TAB 1: DASHBOARD -->
-        <section id="tab-dashboard" class="space-y-8">
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-800 text-white p-6 sm:p-8 shadow-xl shadow-indigo-500/10">
-                <div class="relative z-10 max-w-2xl space-y-3">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20">
-                        <i class="fa-solid fa-fire text-amber-300"></i> <span id="streak-text">4 KUNLIK STREAK!</span>
-                    </span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">O'rganishda davom eting!</h1>
-                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
-                        IELTS 7.5+ va SAT 1450+ maqsadlaringiz uchun har kuni kamida 10 ta yangi so'z yodlang.
-                    </p>
-                    <div class="pt-2 flex flex-wrap gap-3">
-                        <button onclick="switchTab('vocabulary')" class="px-5 py-2.5 bg-white text-indigo-700 hover:bg-indigo-50 font-bold text-sm rounded-xl transition-all shadow-md">
-                            Flashcards Mashq qilish <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
+        <section id="tab-dashboard" class="space-y-6">
+            <div class="p-8 rounded-3xl bg-gradient-to-r from-indigo-600 to-violet-800 text-white shadow-xl space-y-3">
+                <h1 class="text-3xl font-extrabold">Xush kelibsiz, StudyProga!</h1>
+                <p class="text-indigo-100 text-sm">IELTS va SAT imtihonlariga tayyorgarlik ko'rish uchun yuqoridagi **Reading Tests** bo'limiga o'ting.</p>
+                <button onclick="switchTab('reading')" class="px-5 py-2.5 bg-white text-indigo-700 font-bold text-sm rounded-xl shadow-md">Reading Mashqini Boshlash &rarr;</button>
             </div>
         </section>
 
-        <!-- TAB 2: READING PRACTICE (NEW FEATURE) -->
+        <!-- TAB 2: IELTS READING SECTION (DYNAMICALLY LOADED FROM CODE) -->
         <section id="tab-reading" class="hidden space-y-6">
             <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                
+                <!-- Passage Selector (Siz xohlagancha passage qo'shishingiz mumkin) -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
                     <div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">IELTS Academic Reading</span>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Reading Practice & Auto-Highlight</h2>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 border border-emerald-200">IELTS Academic Reading</span>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Passage va Savollar</h2>
                     </div>
-                    <p class="text-xs text-slate-500">Savol raqamini (Q1, Q2) bosing — javob matndan avtomatik belgilab beriladi!</p>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase">Passage tanlash:</label>
+                        <select id="passage-select" onchange="loadPassage(this.value)" class="px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <!-- JavaScript orqali avtomatik to'ldiriladi -->
+                        </select>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- READING PASSAGE -->
-                    <div class="bg-slate-50 dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 h-[500px] overflow-y-auto space-y-4 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                        <h3 class="font-bold text-base text-slate-900 dark:text-white">The History of Writing Materials</h3>
-                        <p id="passage-p1" class="p-2 rounded-xl transition-all duration-300">
-                            <span class="font-bold text-indigo-600">[1]</span> Long before the invention of paper, ancient civilizations recorded their knowledge using a variety of surfaces. In ancient Mesopotamia, scribes used reed styluses to press wedge-shaped marks into wet clay tablets, which were later baked in the sun or kilns to ensure permanence.
-                        </p>
-                        <p id="passage-p2" class="p-2 rounded-xl transition-all duration-300">
-                            <span class="font-bold text-indigo-600">[2]</span> Meanwhile, ancient Egyptians revolutionized record-keeping with the creation of papyrus around 3000 BCE. Made from the pith of the papyrus plant native to the Nile delta, these scrolls provided a lightweight, portable medium that could be easily rolled and transported across the Mediterranean.
-                        </p>
-                        <p id="passage-p3" class="p-2 rounded-xl transition-all duration-300">
-                            <span class="font-bold text-indigo-600">[3]</span> Centuries later, parchment and vellum—derived from treated animal skins—became prominent in Europe, particularly during the Middle Ages. These materials were remarkably durable, allowing medieval monks to produce lavishly illustrated manuscripts that survived for over a thousand years.
-                        </p>
+                    <!-- PASSAGE TEXT CONTAINER -->
+                    <div id="passage-text-box" class="bg-slate-50 dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 h-[520px] overflow-y-auto space-y-4 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                        <!-- Matnlar shu yerga chiqadi -->
                     </div>
 
-                    <!-- QUESTIONS & EXPLANATIONS -->
-                    <div class="space-y-4 h-[500px] overflow-y-auto pr-2">
-                        <!-- Question 1 -->
-                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <button onclick="highlightPassage('passage-p1')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1">
-                                    Q1 <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
-                                </button>
-                                <span class="text-xs text-slate-400 font-medium">Multiple Choice</span>
-                            </div>
-                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">1. What material did ancient Mesopotamian scribes primarily use?</p>
-                            <div class="space-y-1 text-xs text-slate-600 dark:text-slate-400 pl-2">
-                                <p>A) Papyrus scrolls</p>
-                                <p class="text-emerald-600 dark:text-emerald-400 font-bold">✓ B) Wet clay tablets (Correct)</p>
-                                <p>C) Animal skins</p>
-                            </div>
-                            <div class="mt-2 p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-xs text-slate-600 dark:text-slate-300">
-                                <span class="font-bold text-indigo-600 dark:text-indigo-400">💡 Explanation:</span> Matnning 1-paragrafida aytilishicha: "...scribes used reed styluses to press wedge-shaped marks into wet clay tablets".
-                            </div>
-                        </div>
-
-                        <!-- Question 2 -->
-                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <button onclick="highlightPassage('passage-p2')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1">
-                                    Q2 <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
-                                </button>
-                                <span class="text-xs text-slate-400 font-medium">Multiple Choice</span>
-                            </div>
-                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">2. Around when was papyrus created in ancient Egypt?</p>
-                            <div class="space-y-1 text-xs text-slate-600 dark:text-slate-400 pl-2">
-                                <p class="text-emerald-600 dark:text-emerald-400 font-bold">✓ A) Around 3000 BCE (Correct)</p>
-                                <p>B) Middle Ages</p>
-                                <p>C) 1000 CE</p>
-                            </div>
-                            <div class="mt-2 p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-xs text-slate-600 dark:text-slate-300">
-                                <span class="font-bold text-indigo-600 dark:text-indigo-400">💡 Explanation:</span> Matnning 2-paragrafida papirus milloddan avvalgi 3000-yillarda yaratilgani yozilgan: "...creation of papyrus around 3000 BCE".
-                            </div>
-                        </div>
+                    <!-- QUESTIONS & EXPLANATIONS CONTAINER -->
+                    <div id="questions-box" class="space-y-4 h-[520px] overflow-y-auto pr-2">
+                        <!-- Savollar va explanation'lar shu yerga chiqadi -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- OTHER TABS (Vocabulary, Analyzer, AddWord) -->
-        <section id="tab-vocabulary" class="hidden space-y-6"></section>
-        <section id="tab-analyzer" class="hidden space-y-6"></section>
-        <section id="tab-addword" class="hidden space-y-6"></section>
+        <!-- OTHER TABS PLACEHOLDERS -->
+        <section id="tab-vocabulary" class="hidden"></section>
+        <section id="tab-analyzer" class="hidden"></section>
 
     </main>
 
-    <!-- JAVASCRIPT FUNCTIONS -->
+    <!-- SCRIPT: BAZA VA AVTO-GENERATSIYA QILISH -->
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-            const targetSection = document.getElementById('tab-' + tabId);
-            if (targetSection) targetSection.classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-indigo-400', 'shadow-sm');
-                btn.classList.add('text-slate-600', 'dark:text-slate-300');
-            });
-
-            const activeBtn = document.getElementById('nav-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.add('bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-indigo-400', 'shadow-sm');
-                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
+        // 📌 AGAR YANGI PASSAGE YOKI TEST QO'SHISHNI XOHlasangiz, FAQAT MANA BU YERGA YOZASIZ!
+        const passagesData = [
+            {
+                id: "passage-1",
+                title: "Passage 1: The History of Writing Materials",
+                paragraphs: [
+                    { id: "p1", text: "[1] Long before the invention of paper, ancient civilizations recorded their knowledge using a variety of surfaces. In ancient Mesopotamia, scribes used reed styluses to press wedge-shaped marks into wet clay tablets, which were later baked in the sun or kilns to ensure permanence." },
+                    { id: "p2", text: "[2] Meanwhile, ancient Egyptians revolutionized record-keeping with the creation of papyrus around 3000 BCE. Made from the pith of the papyrus plant native to the Nile delta, these scrolls provided a lightweight, portable medium." },
+                    { id: "p3", text: "[3] Centuries later, parchment and vellum—derived from treated animal skins—became prominent in Europe, particularly during the Middle Ages, allowing medieval monks to produce durable illustrated manuscripts." }
+                ],
+                questions: [
+                    {
+                        qNum: "Q1",
+                        targetParagraph: "p1",
+                        questionText: "1. What material did ancient Mesopotamian scribes primarily use?",
+                        options: ["A) Papyrus scrolls", "✓ B) Wet clay tablets (Correct)", "C) Animal skins"],
+                        explanation: "Matnning 1-paragrafida Mesopotamiya kotiblari nam loy taxtachalarga yozgani ko'rsatilgan ('pressed wedge-shaped marks into wet clay tablets')."
+                    },
+                    {
+                        qNum: "Q2",
+                        targetParagraph: "p2",
+                        questionText: "2. Around when was papyrus created in ancient Egypt?",
+                        options: ["✓ A) Around 3000 BCE (Correct)", "B) Middle Ages", "C) Modern era"],
+                        explanation: "Matnning 2-paragrafida papirus eramizdan avvalgi 3000-yillarda yaratilgani yozilgan ('around 3000 BCE')."
+                    }
+                ]
+            },
+            {
+                id: "passage-2",
+                title: "Passage 2: The Rise of Renewable Energy",
+                paragraphs: [
+                    { id: "p2_1", text: "[1] The global transition toward renewable energy sources has accelerated significantly over the past decade. Governments and corporations are increasingly investing in solar and wind power to reduce carbon footprints and combat climate change." },
+                    { id: "p2_2", text: "[2] Solar energy harnesses photovoltaic cells to convert sunlight directly into electricity. Technological advancements have dramatically decreased the cost of solar panels, making residential installations highly affordable worldwide." },
+                    { id: "p2_3", text: "[3] Despite these advantages, intermittency remains a major challenge. Because solar and wind generation depend heavily on weather conditions, efficient battery storage systems are crucial for maintaining a stable power grid." }
+                ],
+                questions: [
+                    {
+                        qNum: "Q1",
+                        targetParagraph: "p2_2",
+                        questionText: "1. What technology do solar panels use to generate electricity?",
+                        options: ["A) Hydraulic turbines", "✓ B) Photovoltaic cells (Correct)", "C) Thermal combustion"],
+                        explanation: "Matnning 2-qismida quyosh energiyasi fotovoltaik hujayralar yordamida elektrga aylanishi aytilgan ('harnesses photovoltaic cells')."
+                    },
+                    {
+                        qNum: "Q2",
+                        targetParagraph: "p2_3",
+                        questionText: "2. What is identified as a major challenge for solar and wind energy?",
+                        options: ["A) High maintenance cost", "✓ B) Intermittency due to weather (Correct)", "C) Lack of sunlight entirely"],
+                        explanation: "3-paragrafda ob-havoga bog'liqlik (intermittency) asosiy muammo ekanligi ko'rsatilgan."
+                    }
+                ]
             }
+            // 💡 Xohlagancha yangi passage'larni mana shu yerga vergul qo'shib qo'shib ketaverasiz!
+        ];
+
+        // Sahifa yuklanganda passage'larni select ga qo'shish
+        window.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('passage-select');
+            passagesData.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = item.id;
+                opt.textContent = item.title;
+                select.appendChild(opt);
+            });
+            if (passagesData.length > 0) {
+                loadPassage(passagesData[0].id);
+            }
+        });
+
+        // Tanlangan passage'ni ekranga chiqarish funksiyasi
+        function loadPassage(id) {
+            const data = passagesData.find(p => p.id === id);
+            if (!data) return;
+
+            // Matnni chiqarish
+            const textBox = document.getElementById('passage-text-box');
+            let textHtml = `<h3 class="font-bold text-base text-slate-900 dark:text-white">${data.title}</h3>`;
+            data.paragraphs.forEach(p => {
+                textHtml += `<p id="${p.id}" class="p-2 rounded-xl transition-all duration-300">${p.text}</p>`;
+            });
+            textBox.innerHTML = textHtml;
+
+            // Savollarni chiqarish
+            const qBox = document.getElementById('questions-box');
+            let qHtml = '';
+            data.questions.forEach(q => {
+                let optionsHtml = q.options.map(opt => `<p class="${opt.startsWith('✓') ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}">${opt}</p>`).join('');
+                
+                qHtml += `
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <button onclick="highlightPassage('${q.targetParagraph}')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1">
+                                ${q.qNum} <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
+                            </button>
+                            <span class="text-xs text-slate-400 font-medium">Multiple Choice</span>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">${q.questionText}</p>
+                        <div class="space-y-1 text-xs text-slate-600 dark:text-slate-400 pl-2">
+                            ${optionsHtml}
+                        </div>
+                        <div class="mt-2 p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-xs text-slate-600 dark:text-slate-300">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400">💡 Explanation:</span> ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+            qBox.innerHTML = qHtml;
         }
 
+        // Highlight funksiyasi
         function highlightPassage(elementId) {
-            document.querySelectorAll('#tab-reading p').forEach(el => {
+            document.querySelectorAll('#passage-text-box p').forEach(el => {
                 el.classList.remove('bg-amber-100', 'dark:bg-amber-950/80', 'border-l-4', 'border-amber-500');
             });
             const target = document.getElementById(elementId);
@@ -259,9 +254,20 @@
             }
         }
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            if (menu) menu.classList.toggle('hidden');
+        // Tab almashtirish
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            const targetSection = document.getElementById('tab-' + tabId);
+            if (targetSection) targetSection.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-indigo-400', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'dark:text-slate-300');
+            });
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-indigo-400', 'shadow-sm');
+            }
         }
 
         function toggleDarkMode() {
