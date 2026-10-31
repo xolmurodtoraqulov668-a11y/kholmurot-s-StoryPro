@@ -67,8 +67,7 @@
                 <nav class="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/50">
                     <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm transition-all">Dashboard</button>
                     <button onclick="switchTab('reading')" id="nav-reading" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all">Reading Tests</button>
-                    <button onclick="switchTab('vocabulary')" id="nav-vocabulary" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all">Flashcards</button>
-                    <button onclick="switchTab('analyzer')" id="nav-analyzer" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all">Essay Analyzer</button>
+                    <button onclick="switchTab('addpassage')" id="nav-addpassage" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-all"><i class="fa-solid fa-plus-circle mr-1"></i> Admin: Passage Qo'shish</button>
                 </nav>
 
                 <div class="flex items-center gap-2">
@@ -88,25 +87,25 @@
         <section id="tab-dashboard" class="space-y-6">
             <div class="p-8 rounded-3xl bg-gradient-to-r from-indigo-600 to-violet-800 text-white shadow-xl space-y-3">
                 <h1 class="text-3xl font-extrabold">Xush kelibsiz, StudyProga!</h1>
-                <p class="text-indigo-100 text-sm">IELTS va SAT imtihonlariga tayyorgarlik ko'rish uchun yuqoridagi **Reading Tests** bo'limiga o'ting.</p>
-                <button onclick="switchTab('reading')" class="px-5 py-2.5 bg-white text-indigo-700 font-bold text-sm rounded-xl shadow-md">Reading Mashqini Boshlash &rarr;</button>
+                <p class="text-indigo-100 text-sm">IELTS Reading testlarini ishlash yoki saytga yangi testlar qo'shish uchun yuqoridagi menyulardan foydalaning.</p>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="switchTab('reading')" class="px-5 py-2.5 bg-white text-indigo-700 font-bold text-sm rounded-xl shadow-md">Reading Mashqi &rarr;</button>
+                    <button onclick="switchTab('addpassage')" class="px-5 py-2.5 bg-indigo-900/60 hover:bg-indigo-900 text-white font-bold text-sm rounded-xl border border-indigo-400/30">Yangi Passage Qo'shish (+)</button>
+                </div>
             </div>
         </section>
 
-        <!-- TAB 2: IELTS READING SECTION (DYNAMICALLY LOADED FROM CODE) -->
+        <!-- TAB 2: IELTS READING SECTION -->
         <section id="tab-reading" class="hidden space-y-6">
             <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-6">
-                
-                <!-- Passage Selector (Siz xohlagancha passage qo'shishingiz mumkin) -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
                     <div>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 border border-emerald-200">IELTS Academic Reading</span>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Passage va Savollar</h2>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Reading Testlar</h2>
                     </div>
                     <div class="flex items-center gap-2">
                         <label class="text-xs font-bold text-slate-500 uppercase">Passage tanlash:</label>
                         <select id="passage-select" onchange="loadPassage(this.value)" class="px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <!-- JavaScript orqali avtomatik to'ldiriladi -->
                         </select>
                     </div>
                 </div>
@@ -114,27 +113,79 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- PASSAGE TEXT CONTAINER -->
                     <div id="passage-text-box" class="bg-slate-50 dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 h-[520px] overflow-y-auto space-y-4 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                        <!-- Matnlar shu yerga chiqadi -->
                     </div>
 
                     <!-- QUESTIONS & EXPLANATIONS CONTAINER -->
                     <div id="questions-box" class="space-y-4 h-[520px] overflow-y-auto pr-2">
-                        <!-- Savollar va explanation'lar shu yerga chiqadi -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- OTHER TABS PLACEHOLDERS -->
-        <section id="tab-vocabulary" class="hidden"></section>
-        <section id="tab-analyzer" class="hidden"></section>
+        <!-- TAB 3: ADMIN - ADD PASSAGE DIRECTLY FROM SITE -->
+        <section id="tab-addpassage" class="hidden max-w-3xl mx-auto space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm space-y-6">
+                <div>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 border border-indigo-200">Admin Panel</span>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Saytdan yangi Passage va Savol qo'shish</h2>
+                    <p class="text-xs text-slate-500 mt-1">Ushbu forma orqali kiritgan ma'lumotlaringiz darhol saytga saqlanadi va kodni o'zgartirish shart emas.</p>
+                </div>
+
+                <form onsubmit="handleAddNewPassage(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Passage Sarlavhasi (Title)</label>
+                        <input type="text" id="admin-title" required placeholder="Masalan: Passage 3: The Evolution of Artificial Intelligence" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Matn Paragraflari (Har bir paragrafni alohida yozing)</label>
+                        <textarea id="admin-paragraphs" rows="4" required placeholder="[1] Birinchi paragraf matni shu yerga yoziladi...&#10;[2] Ikkinchi paragraf matni shu yerga yoziladi..." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:ring-2 focus:ring-indigo-500"></textarea>
+                        <span class="text-[11px] text-slate-400">Eslatma: Paragraflarni alohida qatorlarga [1], [2] shaklida kiriting.</span>
+                    </div>
+
+                    <div class="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-3">
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white">Savol va Tushuntirish (Explanation)</h3>
+                        
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Savol Matni</label>
+                            <input type="text" id="admin-qtext" required placeholder="1. What is the primary focus of AI development?" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Qaysi paragrafga tegishli? (Target ID)</label>
+                                <input type="text" id="admin-target-p" required placeholder="p1 yoki p2" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Savol Raqami</label>
+                                <input type="text" id="admin-qnum" required value="Q1" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Variantlar (Har birini yangi qatorga, to'g'risiga ✓ qo'ying)</label>
+                            <textarea id="admin-options" rows="3" required placeholder="A) Old methods&#10;✓ B) Modern machine learning (Correct)&#10;C) Manual data entry" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Batafsil Tushuntirish (Explanation)</label>
+                            <input type="text" id="admin-explanation" required placeholder="Matnning 1-paragrafida bu haqida aniq yozilgan..." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
+                        <i class="fa-solid fa-check mr-1"></i> Passage va Testni Saqlash
+                    </button>
+                </form>
+            </div>
+        </section>
 
     </main>
 
-    <!-- SCRIPT: BAZA VA AVTO-GENERATSIYA QILISH -->
+    <!-- SCRIPT: BAZA VA ADMIN FORMA LOGIKASI -->
     <script>
-        // 📌 AGAR YANGI PASSAGE YOKI TEST QO'SHISHNI XOHlasangiz, FAQAT MANA BU YERGA YOZASIZ!
-        const passagesData = [
+        // Boshlang'ich standart passage'lar
+        let defaultPassages = [
             {
                 id: "passage-1",
                 title: "Passage 1: The History of Writing Materials",
@@ -150,48 +201,23 @@
                         questionText: "1. What material did ancient Mesopotamian scribes primarily use?",
                         options: ["A) Papyrus scrolls", "✓ B) Wet clay tablets (Correct)", "C) Animal skins"],
                         explanation: "Matnning 1-paragrafida Mesopotamiya kotiblari nam loy taxtachalarga yozgani ko'rsatilgan ('pressed wedge-shaped marks into wet clay tablets')."
-                    },
-                    {
-                        qNum: "Q2",
-                        targetParagraph: "p2",
-                        questionText: "2. Around when was papyrus created in ancient Egypt?",
-                        options: ["✓ A) Around 3000 BCE (Correct)", "B) Middle Ages", "C) Modern era"],
-                        explanation: "Matnning 2-paragrafida papirus eramizdan avvalgi 3000-yillarda yaratilgani yozilgan ('around 3000 BCE')."
-                    }
-                ]
-            },
-            {
-                id: "passage-2",
-                title: "Passage 2: The Rise of Renewable Energy",
-                paragraphs: [
-                    { id: "p2_1", text: "[1] The global transition toward renewable energy sources has accelerated significantly over the past decade. Governments and corporations are increasingly investing in solar and wind power to reduce carbon footprints and combat climate change." },
-                    { id: "p2_2", text: "[2] Solar energy harnesses photovoltaic cells to convert sunlight directly into electricity. Technological advancements have dramatically decreased the cost of solar panels, making residential installations highly affordable worldwide." },
-                    { id: "p2_3", text: "[3] Despite these advantages, intermittency remains a major challenge. Because solar and wind generation depend heavily on weather conditions, efficient battery storage systems are crucial for maintaining a stable power grid." }
-                ],
-                questions: [
-                    {
-                        qNum: "Q1",
-                        targetParagraph: "p2_2",
-                        questionText: "1. What technology do solar panels use to generate electricity?",
-                        options: ["A) Hydraulic turbines", "✓ B) Photovoltaic cells (Correct)", "C) Thermal combustion"],
-                        explanation: "Matnning 2-qismida quyosh energiyasi fotovoltaik hujayralar yordamida elektrga aylanishi aytilgan ('harnesses photovoltaic cells')."
-                    },
-                    {
-                        qNum: "Q2",
-                        targetParagraph: "p2_3",
-                        questionText: "2. What is identified as a major challenge for solar and wind energy?",
-                        options: ["A) High maintenance cost", "✓ B) Intermittency due to weather (Correct)", "C) Lack of sunlight entirely"],
-                        explanation: "3-paragrafda ob-havoga bog'liqlik (intermittency) asosiy muammo ekanligi ko'rsatilgan."
                     }
                 ]
             }
-            // 💡 Xohlagancha yangi passage'larni mana shu yerga vergul qo'shib qo'shib ketaverasiz!
         ];
 
-        // Sahifa yuklanganda passage'larni select ga qo'shish
+        // LocalStorage'dan o'qib olish yoki default'ni ishlatish
+        let storedPassages = localStorage.getItem('studypro_passages');
+        let passagesData = storedPassages ? JSON.parse(storedPassages) : defaultPassages;
+
         window.addEventListener('DOMContentLoaded', () => {
+            initPassageSelect();
+        });
+
+        function initPassageSelect() {
             const select = document.getElementById('passage-select');
-            passagesData.forEach((item, index) => {
+            select.innerHTML = '';
+            passagesData.forEach((item) => {
                 const opt = document.createElement('option');
                 opt.value = item.id;
                 opt.textContent = item.title;
@@ -200,14 +226,13 @@
             if (passagesData.length > 0) {
                 loadPassage(passagesData[0].id);
             }
-        });
+        }
 
-        // Tanlangan passage'ni ekranga chiqarish funksiyasi
+        // Passage'ni ekranga chiqarish
         function loadPassage(id) {
             const data = passagesData.find(p => p.id === id);
             if (!data) return;
 
-            // Matnni chiqarish
             const textBox = document.getElementById('passage-text-box');
             let textHtml = `<h3 class="font-bold text-base text-slate-900 dark:text-white">${data.title}</h3>`;
             data.paragraphs.forEach(p => {
@@ -215,7 +240,6 @@
             });
             textBox.innerHTML = textHtml;
 
-            // Savollarni chiqarish
             const qBox = document.getElementById('questions-box');
             let qHtml = '';
             data.questions.forEach(q => {
@@ -240,6 +264,50 @@
                 `;
             });
             qBox.innerHTML = qHtml;
+        }
+
+        // Sayt ichidan forma orqali yangi passage qo'shish
+        function handleAddNewPassage(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('admin-title').value;
+            const paragraphsRaw = document.getElementById('admin-paragraphs').value;
+            const qText = document.getElementById('admin-qtext').value;
+            const targetP = document.getElementById('admin-target-p').value.trim();
+            const qNum = document.getElementById('admin-qnum').value;
+            const optionsRaw = document.getElementById('admin-options').value;
+            const explanation = document.getElementById('admin-explanation').value;
+
+            // Paragraflarni massivga ajratish
+            let paragraphsArr = paragraphsRaw.split('\n').filter(p => p.trim() !== '').map((text, idx) => {
+                return { id: `p${idx + 1}`, text: text.trim() };
+            });
+
+            // Variantlarni massivga ajratish
+            let optionsArr = optionsRaw.split('\n').filter(o => o.trim() !== '');
+
+            const newPassage = {
+                id: "passage-" + (passagesData.length + 1),
+                title: title,
+                paragraphs: paragraphsArr,
+                questions: [
+                    {
+                        qNum: qNum,
+                        targetParagraph: targetP.startsWith('p') ? targetP : 'p1',
+                        questionText: qText,
+                        options: optionsArr,
+                        explanation: explanation
+                    }
+                ]
+            };
+
+            passagesData.push(newPassage);
+            localStorage.setItem('studypro_passages', JSON.stringify(passagesData));
+
+            alert("Muvaffaqiyatli qo'shildi!");
+            document.querySelector('form').reset();
+            initPassageSelect();
+            switchTab('reading');
         }
 
         // Highlight funksiyasi
